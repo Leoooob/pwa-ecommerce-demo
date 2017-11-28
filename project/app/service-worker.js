@@ -57,7 +57,6 @@ limitations under the License.
 
 
 // TODO SW-4 - use the cache-first strategy to fetch and cache resources in the
-// fetch event listener
 self.addEventListener('fetch', (event) => {
 event.respondWith(
   caches.match(event.request)
@@ -71,7 +70,7 @@ function fetchAndCache(url) {
   return fetch(url)
   .then((response) => {
     // Check if we received a valid response
-    if (!response.ok) {
+    if (!response.status !== 200) {
       throw Error(response.statusText);
     }
     return caches.open(CACHE_NAME)
@@ -81,15 +80,15 @@ function fetchAndCache(url) {
     });
   })
   .catch((error) => {
-    console.log(`Request failed: ${error}`);
+    //console.log(`Request failed: ${error}`);
   });
 }
 
 // TODO SW-5 - delete outdated caches in the activate event listener
 self.addEventListener('activate', function(event) {
-  console.log('Activating new service worker...');
+  //console.log('Activating new service worker...');
 
-  var theCacheWhitelist = [nameOfTheStaticCache];
+  var theCacheWhitelist = [myCache];
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
@@ -101,7 +100,7 @@ self.addEventListener('activate', function(event) {
       );
     })
   );
-  console.log('...finished updating cache.');
+  //console.log('...finished updating cache.');
 });
 
 function notFoundIn(theCache, cacheName) {

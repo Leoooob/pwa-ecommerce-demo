@@ -41,22 +41,22 @@ import {hasPrerequisites} from 'features';
   // TODO SW-2 - register the service worker
 
     if (!('serviceWorker' in navigator)) {
-      console.log('Service worker not supported');
+      //console.log('Service worker not supported');
       return;
     }
     navigator.serviceWorker.register('service-worker.js')
     .then((registration) => {
-      console.log(`Registered at scope: ${registration.scope}`);
+      //console.log(`Registered at scope: ${registration.scope}`);
     })
     .catch((error) => {
-      console.log(`Registration failed: ${error}`);
+      //console.log(`Registration failed: ${error}`);
     });
 
   // Your custom JavaScript goes here
   let app = new App();
   document.addEventListener('DOMContentLoaded', e => {
     if (!hasPrerequisites()) {
-      // TODO make this something nicer than an alert, e.g. a panel in the app 
+      // TODO make this something nicer than an alert, e.g. a panel in the app
       window.alert('This browser is missing some required features');
       return;
     }
