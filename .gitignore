@@ -5,4 +5,5 @@
 # Skip dependencies and builds
 node_modules/
 dist/
+.idea
 
