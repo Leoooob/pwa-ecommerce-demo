@@ -44,15 +44,17 @@ limitations under the License.
     'images/logo.png'
   ];
 
-// TODO SW-3 - cache the application shell
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-      caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(myCache);
-      })
-    );
-  });
+  // TODO SW-3 - cache the application shell
+  self.addEventListener('install', (event) => {
+      event.waitUntil(
+        caches.open(CACHE_NAME)
+        .then((cache) => {
+          return cache.addAll(myCache);
+        })
+      );
+    }
+  );
+
 
 // TODO SW-4 - use the cache-first strategy to fetch and cache resources in the
 // fetch event listener
@@ -84,3 +86,24 @@ function fetchAndCache(url) {
 }
 
 // TODO SW-5 - delete outdated caches in the activate event listener
+self.addEventListener('activate', function(event) {
+  console.log('Activating new service worker...');
+
+  var theCacheWhitelist = [nameOfTheStaticCache];
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (notFoundIn(theCacheWhitelist, cacheName)) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  console.log('...finished updating cache.');
+});
+
+function notFoundIn(theCache, cacheName) {
+  return theCache.indexOf(cacheName) === -1
+}
